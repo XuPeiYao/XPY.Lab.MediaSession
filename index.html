@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <title>Media Session</title>
+</head>
+
+<body>
+    <audio id="player" controls
+        src="https://www.youtube.com/audiolibrary_download?vid=201918bd78191266">你的瀏覽器不支援audio元素</audio>
+    <script>
+        if (navigator.mediaSession) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: '歌名',
+                artist: '歌手名稱',
+                album: '專輯名稱',
+                artwork: [
+                    { src: 'https://i.ytimg.com/vi/D9Gbp9aLLZQ/hqdefault.jpg', sizes: '128x128', type: 'image/png' }
+                ]
+            });
+
+
+            player.addEventListener("play", function () {
+                navigator.mediaSession.playbackState = 'playing';
+            });
+            player.addEventListener("pause", function () {
+                navigator.mediaSession.playbackState = 'paused';
+            });
+
+            // 綁定播放與暫停事件，原有的播放暫停功能將失效，需要自行執行
+            navigator.mediaSession.setActionHandler('play', function () {
+                player.play();
+                navigator.mediaSession.playbackState = 'playing';
+            });
+            navigator.mediaSession.setActionHandler('pause', function () {
+                player.pause();
+                navigator.mediaSession.playbackState = 'paused';
+            });
+
+            // 綁定以下事件才會出現相應按鈕
+            navigator.mediaSession.setActionHandler('seekbackward', function () {
+                player.currentTime -= 10; // 退後10秒
+            });
+            navigator.mediaSession.setActionHandler('seekforward', function () {
+                player.currentTime += 10; // 快轉10秒
+            });
+            navigator.mediaSession.setActionHandler('previoustrack', function () {
+                alert('上一首');
+            });
+            navigator.mediaSession.setActionHandler('nexttrack', function () {
+                alert('下一首');
+            });
+        }
+    </script>
+</body>
+
+</html>
